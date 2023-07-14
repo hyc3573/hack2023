@@ -26,10 +26,39 @@ from utils.general import (CONFIG_DIR, FONT, LOGGER, check_font, check_requireme
 from utils.metrics import fitness
 from utils.segment.general import scale_image
 
+import argparse
+import os
+import platform
+import sys
+from pathlib import Path
+import cv2
+import numpy as np
+import socket
+import pickle
+import torch
+
 # Settings
 RANK = int(os.getenv('RANK', -1))
 matplotlib.rc('font', **{'size': 11})
 matplotlib.use('Agg')  # for writing to files only
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(('172.16.1.155', 12080))
+
+def box_retun(box):
+     x1 = pickle.dumps(int(box[0]))
+     y1 = pickle.dumps(int(box[1]))
+     x2 = pickle.dumps(int(box[2]))
+     y2 = pickle.dumps(int(box[3]))
+
+     s.send(len(x1).to_bytes(4, 'big'))
+     s.sendall(x1)
+     s.send(len(y1).to_bytes(4, 'big'))
+     s.sendall(y1)
+     s.send(len(x2).to_bytes(4, 'big'))
+     s.sendall(x2)
+     s.send(len(y2).to_bytes(4, 'big'))
+     s.sendall(y2)
 
 
 class Colors:
