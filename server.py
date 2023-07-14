@@ -20,3 +20,6 @@ while True:
     cv2.imshow("asdf", frame)
     if cv2.waitKey(25) & 0xFF == ord('q'):
       break
+
+conn.close()
+s.close()
