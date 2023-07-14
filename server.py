@@ -27,7 +27,7 @@ def worker(conn, addr, n):
         #     return
 
         # aquire mutex or just continue (timeout: 0.01s)
-        l.aquire(True, 0.01)
+        l.acquire(True, 0.01)
         # write video
         imgs[n] = frame[:, :, :]
         # release mutex

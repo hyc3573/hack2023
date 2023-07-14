@@ -12,7 +12,7 @@ while True:
     ret, frame = cap.read()
     if not ret:
         continue
-    data = pickle.dumps(frame)
+    data = pickle.dumps(cv2.resize(frame, (500, 500)))
     s.send(len(data).to_bytes(4, 'big')) # byte-length of data
     s.send(len(data).to_bytes(4, 'big')) # x1
     s.send(len(data).to_bytes(4, 'big')) # y1
