@@ -13,7 +13,11 @@ while True:
     if not ret:
         continue
     data = pickle.dumps(frame)
-    s.send(len(data).to_bytes(4, 'big'))
-    s.sendall(data)
+    s.send(len(data).to_bytes(4, 'big')) # byte-length of data
+    s.send(len(data).to_bytes(4, 'big')) # x1
+    s.send(len(data).to_bytes(4, 'big')) # y1
+    s.send(len(data).to_bytes(4, 'big')) # x2
+    s.send(len(data).to_bytes(4, 'big')) # y2
+    s.sendall(data) # data
 
 s.close()
