@@ -39,26 +39,32 @@ import socket
 import pickle
 import torch
 
-# s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# s.connect(('172.16.1.155', 12080))
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(('172.16.1.155', 12080))
 
-# def im0_retun(im0, box):
-#     im0 = cv2.resize(im0, dsize=(500,500), interpolation=cv2.INTER_LINEAR)
-#     im0 = pickle.dumps(im0)
+def im0_xyxy_label_retun(im0, xyxy, label=None):
+    im0 = cv2.resize(im0, dsize=(500,500), interpolation=cv2.INTER_LINEAR)
+    im0 = pickle.dumps(im0)
 
-#     x1 = int(box[0])
-#     y1 = int(box[1])
-#     x2 = int(box[2])
-#     y2 = int(box[3])
+    x1 = int(xyxy[0])
+    y1 = int(xyxy[1])
+    x2 = int(xyxy[2])
+    y2 = int(xyxy[3])
 
-#     s.send(len(im0).to_bytes(4, 'big'))
-#     s.send(x1.to_bytes(4, 'big'))
-#     s.send(y1.to_bytes(4, 'big'))
-#     s.send(x2.to_bytes(4, 'big'))
-#     s.send(y2.to_bytes(4, 'big'))
+    s.send(len(im0).to_bytes(4, 'big'))
+    s.send(x1.to_bytes(4, 'big'))
+    s.send(y1.to_bytes(4, 'big'))
+    s.send(x2.to_bytes(4, 'big'))
+    s.send(y2.to_bytes(4, 'big'))
 
+    if label:
+        label = 1
+        s.send(label.to_bytes(4, 'big'))
+    else:        
+        label = 0
+        s.send(label.to_bytes(4, 'big'))
     
-#     s.sendall(im0)
+    s.sendall(im0)
 
 
 FILE = Path(__file__).resolve()
@@ -196,7 +202,7 @@ def run(
                         c = int(cls)  # integer class
                         label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
                         annotator.box_label(xyxy, label, color=colors(c, True))
-                        # im0_retun(im0,xyxy)
+                        im0_xyxy_label_retun(im0,xyxy,label)
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
 
@@ -288,4 +294,4 @@ if __name__ == '__main__':
 
 
     
-# s.close()
+s.close()
