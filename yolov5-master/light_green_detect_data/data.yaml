@@ -1,0 +1,13 @@
+train: light-green-detect.v1i.yolov5pytorch/train/images
+val: light-green-detect.v1i.yolov5pytorch/valid/images
+test: light-green-detect.v1i.yolov5pytorch/test/images
+
+nc: 1
+names: ['weston_spy']
+
+roboflow:
+  workspace: ai-oyt6p
+  project: light-green-detect
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/ai-oyt6p/light-green-detect/dataset/1
